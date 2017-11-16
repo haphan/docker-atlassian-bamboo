@@ -1,5 +1,35 @@
 [![Build Status](https://img.shields.io/circleci/project/cptactionhank/docker-atlassian-bamboo.svg)](https://circleci.com/gh/cptactionhank/docker-atlassian-bamboo) [![Open Issues](https://img.shields.io/github/issues/cptactionhank/docker-atlassian-bamboo.svg)](https://github.com/cptactionhank/docker-atlassian-bamboo/issues) [![Stars on GitHub](https://img.shields.io/github/stars/cptactionhank/docker-atlassian-bamboo.svg)](https://github.com/cptactionhank/docker-atlassian-bamboo/stargazers) [![Forks on GitHub](https://img.shields.io/github/forks/cptactionhank/docker-atlassian-bamboo.svg)](https://github.com/cptactionhank/docker-atlassian-bamboo/network) [![Stars on Docker Hub](https://img.shields.io/docker/stars/cptactionhank/atlassian-bamboo.svg)](https://hub.docker.com/r/cptactionhank/atlassian-bamboo/) [![Pulls on Docker Hub](https://img.shields.io/docker/pulls/cptactionhank/atlassian-bamboo.svg)](https://hub.docker.com/r/cptactionhank/atlassian-bamboo/)
 
+# Added capabilities
+
+- `ansible` and `ansible-playbook`
+- `docker` client
+- `oc`  OpenShift cli
+- `kubeclt` Kubernetes cli
+- `sonar-scanner` Sonar Scanner
+
+# Quick start
+
+- Port `8085` is web interface of bamboo
+
+- Port `54663` is used for remote agent callback
+ 
+- Mount `/var/run/docker.sock` if you need to access docker engine 
+
+```bash
+docker run -it -d --name bamboo-server \
+  --restart always \
+  -p 8085:8085 \
+  -p 54663:54663 \
+  -v $HOME/bamboo:/var/atlassian/bamboo \
+  -v $HOME/.ssh:/root/.ssh \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  haphan/docker-atlassian-bamboo:latest
+```
+
+====================================
+
+
 # Atlassian Bamboo in a Docker container
 
 This is a containerized installation of Atlassian Bamboo with Docker, and it's a match made in heaven for us all to enjoy. The aim of this image is to keep the installation as straight forward as possible, but with a few Docker related twists. You can get started by clicking the appropriate link below and reading the documentation.

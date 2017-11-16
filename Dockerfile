@@ -11,7 +11,7 @@ ENV OPENSHIFT_CLI  https://github.com/openshift/origin/releases/download/v3.6.1/
 RUN set -x \
     && apt-get update --quiet \
     && apt-get install --quiet --yes --no-install-recommends \
-        xmlstarlet libtcnative-1 apt-transport-https ca-certificates curl gnupg2 software-properties-common ansible axel \
+        sudo xmlstarlet libtcnative-1 apt-transport-https ca-certificates curl nano gnupg2 software-properties-common ansible axel make \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable" \
     && apt-key adv --fetch-keys https://download.docker.com/linux/debian/gpg \
     && curl --silent https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
@@ -19,7 +19,6 @@ RUN set -x \
     && git lfs install \
     && apt-get update && apt-get install --quiet --yes --no-install-recommends docker-ce  \
     && axel -a -n10 -q -o /tmp/oc.tar.gz "${OPENSHIFT_CLI}" \
-
     && tar -C /tmp -xvzf /tmp/oc.tar.gz \
     && mv /tmp/openshift-origin-client-tools-v3.6.1-008f2d5-linux-64bit/oc /usr/local/bin/ \
     && chmod +x /usr/local/bin/oc \
@@ -33,6 +32,12 @@ RUN set -x \
         --delete              "Server/Service/Engine/Host/@xmlNamespaceAware" \
                               "${BAMBOO_INSTALL}/conf/server.xml" \
     && touch -d "@0"          "${BAMBOO_INSTALL}/conf/server.xml" \
+    && cd /opt \
+    && curl -LO https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778-linux.zip \
+    && unzip /opt/sonar-scanner-cli-3.0.3.778-linux.zip; rm /opt/sonar-scanner-cli-3.0.3.778-linux.zip \
+    && curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+    && chmod +x ./kubectl \
+    && mv ./kubectl /usr/local/bin/kubectl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/*
